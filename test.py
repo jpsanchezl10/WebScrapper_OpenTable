@@ -1,8 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import random
-import mysql.connector
-
+import sqlite3
 
 def get_urls(URL, user_agents):
 
@@ -79,7 +78,24 @@ def scrape_opentable(URL, user_agents):
 
 
 
+####sqlite connector 
+conn = sqlite3.connect('Cancun_Restaurants')
+cursor = conn.cursor()
 
+# Create a table to store the restaurant information
+cursor.execute('''CREATE TABLE IF NOT EXISTS restaurants (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    restaurant_name TEXT,
+                    dining_style TEXT,
+                    cuisine_style TEXT,
+                    Hours_Operation TEXT,
+                    Phone_number TEXT,
+                    rest_url TEXT,
+                    Payment_options TEXT,
+                    dressing_style TEXT,
+                    Aditional_information TEXT
+
+                )''')
 
 
 user_agents = [
@@ -91,7 +107,7 @@ user_agents = [
     ]
 
 
-URL = 'https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAIMTSzMja1MjBQ0lEyRpEBCpgABQyNgJIQeVMlKyMdJTOQKkM9Q2MTI1NLHV0LMz0LA2NLU1OQBgugXIBrULC_n6OPZ5RrUHxgqGtQJFDCEiih7JSfn-2WX-RTmpecEZKfklgJlDAEWhodC6SBdqUl5hSn1gIA1zdSm6IAAAA=?originid=9d5b508d-dfd1-4592-8d2d-ee00e38a83ba'
+URL = 'https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAIMTK0MjW0MjBQ0lEyRpEBCpgABQzNgZIQeVMlKyMdJTOQKkM9Q2MTI1NLHV0LMz0LA2NLU1OQBgugXIBrULC_n6OPZ5RrUHxgqGtQJFDCEiih7FiWmJmTmJST6pZf5JKZl5da5JdfDpQ0BFocHQukgfalJeYUp9YCAC-Y-f-mAAAA?originid=cbe5cdbf-804a-486e-ada3-1443b3f195a4'
 URL_two ="https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNTAPMTSzMjWwMjBQ0lEyRpEBCpgABQyNgJIQeVMlKyMdJTOQKkM9Q2NjS2NLUx1dCzM9CwMgy9QCqMQCKBngGhTs7-fo4xnlGhQfGOoaFAmUsARKKDvl52e75Rf5lOYlZ4TkpyRWAiUMgbZGxwJpoGVpiTnFqbUArHVfmqMAAAA=?originid=f3202d6c-9f7c-4e41-a42c-460ba4d0d007&corrid=3129ec52-0217-4054-83c3-600875857298&page=2"
 URL_three= "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNTAPMTSzMjWwMjBQ0lEyRpEBCpgABQyNgJIQeVMlKyMdJTOQKkM9Q2NjS2NLUx1dCzM9CwMgy9QCqMQCKBngGhTs7-fo4xnlGhQfGOoaFAmUsARKKDvl52e75Rf5lOYlZ4TkpyRWAiUMgbZGxwJpoGVpiTnFqbUArHVfmqMAAAA=?originid=f3202d6c-9f7c-4e41-a42c-460ba4d0d007&corrid=3129ec52-0217-4054-83c3-600875857298&page=3"
 URL_four = "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNTAPMTSzMjWwMjBQ0lEyRpEBCpgABQyNgJIQeVMlKyMdJTOQKkM9Q2NjS2NLUx1dCzM9CwMgy9QCqMQCKBngGhTs7-fo4xnlGhQfGOoaFAmUsARKKDvl52e75Rf5lOYlZ4TkpyRWAiUMgbZGxwJpoGVpiTnFqbUArHVfmqMAAAA=?originid=f3202d6c-9f7c-4e41-a42c-460ba4d0d007&corrid=3129ec52-0217-4054-83c3-600875857298&page=4"
@@ -110,48 +126,36 @@ for url in Rest_URL_list:
 
 
 number = 0
-#prints all the elements
+list_item = 0
+
+#prints the elements in each list till element 8 ( 0 to 7 = 8)
 for i in result_list:
+    #initializes aditional_items or resets it
+    aditional_items = "ADITIONAL ITEMS: \n"
     for item in result_list[number]:
-        print(item, "\n")
+        if list_item <= 7:
+            print(item, "\n")
+            #add element to sql database HERE
+            list_item = list_item + 1
+        else:
+            aditional_items += item + '\n'
+    #prints aditional Items
+    print(aditional_items)
+    #ADDS ADITIONAL ITEMS TO DBS HERE
+
+    #increments the list number
     number = number + 1
-    print("next Item############################### \n")
+
+    #resets the item number
+    list_item = 0
 
 
 
 #print(result_list[0])
 
 
-####sqlite connector 
-# Create a connection to the MySQL database
-conn = mysql.connector.connect(
-    host='127.0.0.1',
-    user='root',
-    #password='your_password',
-    database='Cancun_Restaurants'
-)
 
-cursor = conn.cursor()
-
-# Create a table to store the restaurant information
-cursor.execute('''CREATE TABLE IF NOT EXISTS restaurants (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    restaurant_name TEXT,
-                    dining_style TEXT,
-                    cuisine_style TEXT,
-                    Hours_Operation TEXT,
-                    Phone_number TEXT,
-                    rest_url TEXT,
-                    dressing_style TEXT,
-                    Location_reference TEXT,
-                    City_name TEXT,
-                    Parking_type TEXT,
-                    extra_one TEXT,
-                    extra_two TEXT
-
-
-                )''')
 #examples of extras 
 # extra_one : Kilómetro 14.5 
 
-#extra_two: Gender Neutral Restroom, Patio/Outdoor Dining, View, Wheelchair Access
+#extra_two: Gender Neutral Restroom, Patio/Outdoor Dining, View, Wheelchair Accessnn
