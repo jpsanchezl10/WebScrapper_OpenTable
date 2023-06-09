@@ -78,26 +78,6 @@ def scrape_opentable(URL, user_agents):
 
 
 
-####sqlite connector 
-conn = sqlite3.connect('Cancun_Restaurants')
-cursor = conn.cursor()
-
-# Create a table to store the restaurant information
-cursor.execute('''CREATE TABLE IF NOT EXISTS restaurants (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    restaurant_name TEXT,
-                    dining_style TEXT,
-                    cuisine_style TEXT,
-                    Hours_Operation TEXT,
-                    Phone_number TEXT,
-                    rest_url TEXT,
-                    Payment_options TEXT,
-                    dressing_style TEXT,
-                    Aditional_information TEXT
-
-                )''')
-
-
 user_agents = [
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
         'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36',
@@ -107,7 +87,7 @@ user_agents = [
     ]
 
 
-URL = 'https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAIMTK0MjW0MjBQ0lEyRpEBCpgABQzNgZIQeVMlKyMdJTOQKkM9Q2MTI1NLHV0LMz0LA2NLU1OQBgugXIBrULC_n6OPZ5RrUHxgqGtQJFDCEiih7FiWmJmTmJST6pZf5JKZl5da5JdfDpQ0BFocHQukgfalJeYUp9YCAC-Y-f-mAAAA?originid=cbe5cdbf-804a-486e-ada3-1443b3f195a4'
+URL = 'https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAMMTCwMjS1MjBQ0lEyRpaxAAqYAAUMLa2MDSDypkpWRjpKZiBVhnqGxiZGppY6uhZmehYGxpampiANFkC5ANegYH8_Rx_PKNeg-MBQ16BIoIQlUELZKT8_2y2_yCUzLy-1CChoCLQwOhZIA-1JS8wpTq0FAHO6hueeAAAA?originid=14383710-dd5b-48f8-a8ec-61618953eed7'
 URL_two ="https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNTAPMTSzMjWwMjBQ0lEyRpEBCpgABQyNgJIQeVMlKyMdJTOQKkM9Q2NjS2NLUx1dCzM9CwMgy9QCqMQCKBngGhTs7-fo4xnlGhQfGOoaFAmUsARKKDvl52e75Rf5lOYlZ4TkpyRWAiUMgbZGxwJpoGVpiTnFqbUArHVfmqMAAAA=?originid=f3202d6c-9f7c-4e41-a42c-460ba4d0d007&corrid=3129ec52-0217-4054-83c3-600875857298&page=2"
 URL_three= "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNTAPMTSzMjWwMjBQ0lEyRpEBCpgABQyNgJIQeVMlKyMdJTOQKkM9Q2NjS2NLUx1dCzM9CwMgy9QCqMQCKBngGhTs7-fo4xnlGhQfGOoaFAmUsARKKDvl52e75Rf5lOYlZ4TkpyRWAiUMgbZGxwJpoGVpiTnFqbUArHVfmqMAAAA=?originid=f3202d6c-9f7c-4e41-a42c-460ba4d0d007&corrid=3129ec52-0217-4054-83c3-600875857298&page=3"
 URL_four = "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNTAPMTSzMjWwMjBQ0lEyRpEBCpgABQyNgJIQeVMlKyMdJTOQKkM9Q2NjS2NLUx1dCzM9CwMgy9QCqMQCKBngGhTs7-fo4xnlGhQfGOoaFAmUsARKKDvl52e75Rf5lOYlZ4TkpyRWAiUMgbZGxwJpoGVpiTnFqbUArHVfmqMAAAA=?originid=f3202d6c-9f7c-4e41-a42c-460ba4d0d007&corrid=3129ec52-0217-4054-83c3-600875857298&page=4"
@@ -125,37 +105,117 @@ for url in Rest_URL_list:
     result_list.append(results)
 
 
-number = 0
-list_item = 0
+# Connect to the SQLite database
+conn = sqlite3.connect('Cancun_Restaurants.db')
+cursor = conn.cursor()
 
-#prints the elements in each list till element 8 ( 0 to 7 = 8)
+# SQLite command to create the restaurants table
+create_table_query = '''
+    CREATE TABLE IF NOT EXISTS restaurants (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        restaurant_name TEXT,
+        dining_style TEXT,
+        cuisine_style TEXT,
+        Hours_Operation TEXT,
+        Phone_number TEXT,
+        rest_url TEXT,
+        Payment_options TEXT,
+        dressing_style TEXT,
+        Aditional_information TEXT
+    )
+'''
+
+# Execute the create table command
+cursor.execute(create_table_query)
+
+# Commit the changes and close the connection
+conn.commit()
+#conn.close()
+
+def insert_empty_values_sqlite():
+    values = (
+        'test',
+        'test',
+        'test',
+        'test',
+        'test',
+        'test',
+        'test',
+        'test',
+        'test'
+)
+    # Execute the SQL statement
+    cursor.execute("""
+        INSERT INTO restaurants (
+            restaurant_name,
+            dining_style,
+            cuisine_style,
+            Hours_Operation,
+            Phone_number,
+            rest_url,
+            Payment_options,
+            dressing_style,
+            Aditional_information
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+    """, values)
+
+    # Commit the changes to the database
+    conn.commit()
+
+    ##end of funtion 
+
+#identifies in what restaurant number we are 
+number = 0
+#identifies in what item from the list we are 
+list_item = 0
+#identifies in what row of the table we are
+id_table = 1;
+
+column_name = ["restaurant_name","dining_style","cuisine_style","Hours_Operation","Phone_number","rest_url","Payment_options","dressing_style","Aditional_information"]
+
+#iterates the result list ( all the restaurnats)
 for i in result_list:
+    #initializes new empty values in table  to be able to update them later 
+    insert_empty_values_sqlite()
+
     #initializes aditional_items or resets it
     aditional_items = "ADITIONAL ITEMS: \n"
+
+#prints the elements in each list till element 8 ( 0 to 7 = 8)
     for item in result_list[number]:
         if list_item <= 7:
             print(item, "\n")
             #add element to sql database HERE
+            cursor.execute(
+                f"UPDATE restaurants SET {column_name[list_item]} = ? WHERE id = ?;",
+                (item, id_table)
+            )
+
             list_item = list_item + 1
         else:
             aditional_items += item + '\n'
+            
     #prints aditional Items
     print(aditional_items)
     #ADDS ADITIONAL ITEMS TO DBS HERE
+    cursor.execute(
+        f"UPDATE restaurants SET Aditional_information = ? WHERE id = ?;",
+        (aditional_items, id_table)
+    )
 
     #increments the list number
-    number = number + 1
+    number += 1
 
     #resets the item number
     list_item = 0
 
+    #increments the id of the table
+    id_table += 1
+    
+    #commits all the updates
+    conn.commit()
 
 
-#print(result_list[0])
-
-
-
-#examples of extras 
-# extra_one : Kilómetro 14.5 
-
-#extra_two: Gender Neutral Restroom, Patio/Outdoor Dining, View, Wheelchair Accessnn
+#closes de conection with sqli
+conn.close()
