@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import random
 import sqlite3
+import re
 
 def get_urls(URL, user_agents,cookies):
 
@@ -79,7 +80,8 @@ def scrape_opentable(URL, user_agents):
 
         ##ADDS results to array
         for result in Aditional_results:
-            filtered_text = result.text.strip()
+            filtered_text = re.sub(r'<br\s*/?>', '', str(result))
+            filtered_text = re.sub(r'\s*<.*?>\s*', ' ', filtered_text).strip()
             if filtered_text not in results:
                 results.append(filtered_text)
         
@@ -111,14 +113,7 @@ URL_EIGHT = ""
 URL_Nine = ""
 
 URLs = [
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09&corrid=6658e12a-ea5d-47e1-8d34-cbc28f1be16e",
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09&corrid=6658e12a-ea5d-47e1-8d34-cbc28f1be16e&page=2",
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09&corrid=6658e12a-ea5d-47e1-8d34-cbc28f1be16e&page=3",
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09&corrid=6658e12a-ea5d-47e1-8d34-cbc28f1be16e&page=4",
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09&corrid=6658e12a-ea5d-47e1-8d34-cbc28f1be16e&page=5",
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09&corrid=6658e12a-ea5d-47e1-8d34-cbc28f1be16e&page=6",
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09&corrid=6658e12a-ea5d-47e1-8d34-cbc28f1be16e&page=7"
-
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09"
 
 ]
 
