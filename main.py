@@ -54,12 +54,18 @@ def scrape_opentable(URL, user_agents):
 
 
         # Find the name 
+       
         Name_results = soup.find_all("h1", class_="eM9Li2wbkQvvjxZB11sV mPudeIT67bJGOcOfKy92")
         #adds name to results
         for name in Name_results:
             filtered_name = name.text.strip()
             results.append(filtered_name)
 
+        #find Rating and append it to results 
+        Rating_results = soup.find_all("span", class_="QBMm80naGcMZ6qlVk6OI cpEOy_DPrbjR6hnlY0ub")
+        for rating in Rating_results:
+            filtered_rating = rating.text.strip()
+            results.append(filtered_rating)
         # inside same class 
         # Neigborhood, hour of operation ,cusine style , dining style , dress code, parking details , payment options,chef, phonenumber
         Aditional_results = soup.find_all("p", class_="c_qirB1mFl5VRKHYJqTz")
@@ -87,7 +93,7 @@ user_agents = [
     ]
 
 
-URL = 'https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAMMTCwMjS1MjBQ0lEyRpaxAAqYAAUMLa2MDSDypkpWRjpKZiBVhnqGxiZGppY6uhZmehYGxpampiANFkC5ANegYH8_Rx_PKNeg-MBQ16BIoIQlUELZKT8_2y2_yCUzLy-1CChoCLQwOhZIA-1JS8wpTq0FAHO6hueeAAAA?originid=14383710-dd5b-48f8-a8ec-61618953eed7'
+URL = 'https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAMMTCwMjS2MjBQ0lEyRpEBCpgABYDyxgYQeVMlKyMdJTOwKj0LI2NzHV0Lcz1jY2MLoKQFUDjANSjY38_RxzPKNSg-MNQ1KBIoYQmUUHYsS8zMSUzKSXXLL_JJLEl1yczLSy3yyy8HKjAE2hsdC6SB1qUl5hSn1gIA9usIoaUAAAA=?originid=08210bdd-b16a-4f24-8bee-ef2aa241163c&corrid=4fa0e20f-b090-42b6-a921-89ed3959b0f4'
 URL_two ="https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAMMTCwMjS1MjBQ0lEyRpaxAAqYAAUMLa2MDSDypkpWRjpKZiBVhnqGxiZGppY6uhZmehYGxpampiANFkC5ANegYH8_Rx_PKNeg-MBQ16BIoIQlUELZKT8_2y2_yCUzLy-1CChoCLQwOhZIA-1JS8wpTq0FAHO6hueeAAAA?originid=14383710-dd5b-48f8-a8ec-61618953eed7&page=2&corrid=7c61931e-4ca0-4338-a5e7-aa09680b5534"
 URL_three= "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAMMTCwMjS1MjBQ0lEyRpaxAAqYAAUMLa2MDSDypkpWRjpKZiBVhnqGxiZGppY6uhZmehYGxpampiANFkC5ANegYH8_Rx_PKNeg-MBQ16BIoIQlUELZKT8_2y2_yCUzLy-1CChoCLQwOhZIA-1JS8wpTq0FAHO6hueeAAAA?originid=14383710-dd5b-48f8-a8ec-61618953eed7&page=3&corrid=ae94a338-3a9f-447f-836e-7886a691563f"
 URL_four = "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAMMTCwMjS1MjBQ0lEyRpaxAAqYAAUMLa2MDSDypkpWRjpKZiBVhnqGxiZGppY6uhZmehYGxpampiANFkC5ANegYH8_Rx_PKNeg-MBQ16BIoIQlUELZKT8_2y2_yCUzLy-1CChoCLQwOhZIA-1JS8wpTq0FAHO6hueeAAAA?originid=14383710-dd5b-48f8-a8ec-61618953eed7&page=4&corrid=ae94a338-3a9f-447f-836e-7886a691563f"
@@ -95,7 +101,7 @@ URL_FIVE = "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLW
 URL_SIX = "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAMMTCwMjS1MjBQ0lEyRpaxAAqYAAUMLa2MDSDypkpWRjpKZiBVhnqGxiZGppY6uhZmehYGxpampiANFkC5ANegYH8_Rx_PKNeg-MBQ16BIoIQlUELZKT8_2y2_yCUzLy-1CChoCLQwOhZIA-1JS8wpTq0FAHO6hueeAAAA?originid=14383710-dd5b-48f8-a8ec-61618953eed7&page=6&corrid=ae94a338-3a9f-447f-836e-7886a691563f"
 
 #Gets restaurnant URL LIST #change with url, url_2 ...
-Rest_URL_list = get_urls(URL_SIX, user_agents)
+Rest_URL_list = get_urls(URL, user_agents)
 
 result_list = []
 
@@ -115,6 +121,7 @@ create_table_query = '''
     CREATE TABLE IF NOT EXISTS restaurants (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         restaurant_name TEXT,
+        restaurant_rating TEXT,
         dining_style TEXT,
         cuisine_style TEXT,
         Hours_Operation TEXT,
@@ -143,12 +150,14 @@ def insert_empty_values_sqlite():
         'test',
         'test',
         'test',
+        'test',
         'test'
 )
     # Execute the SQL statement
     cursor.execute("""
         INSERT INTO restaurants (
             restaurant_name,
+            restaurant_rating,
             dining_style,
             cuisine_style,
             Hours_Operation,
@@ -158,7 +167,7 @@ def insert_empty_values_sqlite():
             dressing_style,
             Aditional_information
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     """, values)
 
     # Commit the changes to the database
@@ -171,9 +180,9 @@ number = 0
 #identifies in what item from the list we are 
 list_item = 0
 #identifies in what row of the table we are
-id_table = 143;
+id_table = 1;
 
-column_name = ["restaurant_name","dining_style","cuisine_style","Hours_Operation","Phone_number","rest_url","Payment_options","dressing_style","Aditional_information"]
+column_name = ["restaurant_name","restaurant_rating","dining_style","cuisine_style","Hours_Operation","Phone_number","rest_url","Payment_options","dressing_style","Aditional_information"]
 
 #iterates the result list ( all the restaurnats)
 for i in result_list:
@@ -183,9 +192,9 @@ for i in result_list:
     #initializes aditional_items or resets it
     aditional_items = "ADITIONAL ITEMS: \n"
 
-#prints the elements in each list till element 8 ( 0 to 7 = 8)
+#prints the elements in each list till element 9 ( 0 to 8 = 9)
     for item in result_list[number]:
-        if list_item <= 7:
+        if list_item <= 8:
             print(item, "\n")
             #add element to sql database HERE
             cursor.execute(
