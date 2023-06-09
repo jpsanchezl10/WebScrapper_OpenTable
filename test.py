@@ -3,12 +3,13 @@ from bs4 import BeautifulSoup
 import random
 import sqlite3
 import re
+#import os
 
-def get_urls(URL, user_agents,cookies):
+def get_urls(URL, user_agents):
 
     user_agent = random.choice(user_agents)
     headers = {'User-Agent': user_agent}
-    response = requests.get(URL, headers=headers,cookies=cookies)
+    response = requests.get(URL, headers=headers)
     
     # Check if the request was successful
     if response.status_code == 200:
@@ -102,30 +103,20 @@ user_agents = [
     ]
 
 
-URL_one = "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1WNwQrCMBAF_2W9JmWb1TbNrWAEoVSNerAiEiFCIbRQxR6K_-6iJ08PZgbeBAoMKFQkMZNYHDA1SAYRBNCfYTBngGgIf34BRgnIvlWiFeVC6jwhIs1SM95at9_UZbVurLvujtadWBQsZuXLt9HfYlj1Q-WfYdl2XRjqfuQg5d_zhZfv7j4-wvsDLQ9FLKUAAAA=?originid=55ea4280-7023-4498-abf0-a5f73f1c77b8&corrid=be75be06-ab30-4731-8d51-759c72e082b9"
-URL_two =""
-URL_three= ""
-URL_four = ""
-URL_FIVE = ""
-URL_SIX = ""
-URL_SEVEN = ""
-URL_EIGHT = ""
-URL_Nine = ""
-
 URLs = [
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09"
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOwQrCMAwG4HeJ122kbZq1ve0wQRhTpx50iFSZKAwHinoQ392IJ0-B__tD8gINATRqkyKn6JfKBOMCIiRg_kQCkkCR4M8tBJ0Af1sqQ-9y7VETKyJKUseZI5szs8-tddbKgpPqrGwW07qoJpuy2c1XZbMW8AKj4hHPfdz33Xi4VvfL4VQPTzElb7RbmXL9GPtb9_4AMi8-_LQAAAA=?originid=91dab0e4-4657-46c6-a5e3-0bc25f0c05b3&page=2&corrid=e3fa0f2b-83ec-4dc6-b3b3-0e0a70081ba7",
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOwQrCMAwG4HeJ122kbZq1ve0wQRhTpx50iFSZKAwHinoQ392IJ0-B__tD8gINATRqkyKn6JfKBOMCIiRg_kQCkkCR4M8tBJ0Af1sqQ-9y7VETKyJKUseZI5szs8-tddbKgpPqrGwW07qoJpuy2c1XZbMW8AKj4hHPfdz33Xi4VvfL4VQPTzElb7RbmXL9GPtb9_4AMi8-_LQAAAA=?originid=91dab0e4-4657-46c6-a5e3-0bc25f0c05b3&corrid=e3fa0f2b-83ec-4dc6-b3b3-0e0a70081ba7",
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOwQrCMAwG4HeJ122kbZq1ve0wQRhTpx50iFSZKAwHinoQ392IJ0-B__tD8gINATRqkyKn6JfKBOMCIiRg_kQCkkCR4M8tBJ0Af1sqQ-9y7VETKyJKUseZI5szs8-tddbKgpPqrGwW07qoJpuy2c1XZbMW8AKj4hHPfdz33Xi4VvfL4VQPTzElb7RbmXL9GPtb9_4AMi8-_LQAAAA=?originid=91dab0e4-4657-46c6-a5e3-0bc25f0c05b3&corrid=e3fa0f2b-83ec-4dc6-b3b3-0e0a70081ba7&page=3",
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOwQrCMAwG4HeJ122kbZq1ve0wQRhTpx50iFSZKAwHinoQ392IJ0-B__tD8gINATRqkyKn6JfKBOMCIiRg_kQCkkCR4M8tBJ0Af1sqQ-9y7VETKyJKUseZI5szs8-tddbKgpPqrGwW07qoJpuy2c1XZbMW8AKj4hHPfdz33Xi4VvfL4VQPTzElb7RbmXL9GPtb9_4AMi8-_LQAAAA=?originid=91dab0e4-4657-46c6-a5e3-0bc25f0c05b3&corrid=18647b7f-d67f-46f6-b654-3b69d6117f60&page=4",
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOwQrCMAwG4HeJ122kbZq1ve0wQRhTpx50iFSZKAwHinoQ392IJ0-B__tD8gINATRqkyKn6JfKBOMCIiRg_kQCkkCR4M8tBJ0Af1sqQ-9y7VETKyJKUseZI5szs8-tddbKgpPqrGwW07qoJpuy2c1XZbMW8AKj4hHPfdz33Xi4VvfL4VQPTzElb7RbmXL9GPtb9_4AMi8-_LQAAAA=?originid=91dab0e4-4657-46c6-a5e3-0bc25f0c05b3&corrid=18647b7f-d67f-46f6-b654-3b69d6117f60&page=5"
+
 
 ]
 
 result_list = []
-cookies = {
-    'ftc': 'x=2023-06-09T17%3A43%3A07&c=1&pt1=1&pt2=1',
-    'OptanonAlertBoxClosed':'2023-06-09T16:50:25.326Z',
-    'OT-Session-Update-Date':'1686329427'
 
-}
 for URL in URLs:
-    Rest_URL_list = get_urls(URL, user_agents,cookies=cookies)
+    Rest_URL_list = get_urls(URL, user_agents)
 
     #returns restaurant Information 
 
@@ -204,53 +195,88 @@ def insert_empty_values_sqlite():
 number = 0
 #identifies in what item from the list we are 
 list_item = 0
+
+#try to read if there is a current id
+file_path = 'current_id.txt'
+# Open the file in read mode
+with open(file_path, 'r') as file:
+    file_content = file.read()
 #identifies in what row of the table we are
-id_table = 1;
+# Convert the file content to an integer
+#try:
+#    id_table = int(file_content)
+#    #adds one to the id so it wont overwrite last item 
+#except ValueError:
+#    id_table = 1
+
+# Execute the SELECT query to get the last row's ID
+cursor.execute("SELECT id FROM restaurants ORDER BY id DESC LIMIT 1")
+# Fetch the first row from the result
+last_row = cursor.fetchone()
+# Check if a row was returned
+if last_row is not None:
+    # Get the ID value from the first column of the row
+    last_row_id = last_row[0]
+    id_table = last_row
+else:
+    id_table = 1
 
 column_name = ["restaurant_name","restaurant_rating","restaurant_price","dining_style","cuisine_style","Hours_Operation","Phone_number","rest_url","Payment_options","dressing_style","Aditional_information"]
 
 #iterates the result list ( all the restaurnats)
 for i in result_list:
-    #initializes new empty values in table  to be able to update them later 
-    insert_empty_values_sqlite()
-
-    #initializes aditional_items or resets it
-    aditional_items = "ADITIONAL ITEMS: \n"
-
-#prints the elements in each list till element 10 ( 0 to 9 = 10)
-    for item in result_list[number]:
-        if list_item <= 9:
-            print(item, "\n")
-            #add element to sql database HERE
-            cursor.execute(
-                f"UPDATE restaurants SET {column_name[list_item]} = ? WHERE id = ?;",
-                (item, id_table)
-            )
-
-            list_item = list_item + 1
-        else:
-            aditional_items += item + '\n'
-            
-    #prints aditional Items
-    print(aditional_items)
-    #ADDS ADITIONAL ITEMS TO DBS HERE
-    cursor.execute(
-        f"UPDATE restaurants SET Aditional_information = ? WHERE id = ?;",
-        (aditional_items, id_table)
-    )
-
-    #increments the list number
-    number += 1
-
-    #resets the item number
-    list_item = 0
-
-    #increments the id of the table
-    id_table += 1
     
-    #commits all the updates
-    conn.commit()
+    #initializes aditional_items or resets it
+    aditional_items = ""
+
+    #CHECK IF the restaurant already exists 
+    
+    restaurant_name = i[0]
+    # Check if the restaurant name already exists in the database
+    cursor.execute("SELECT restaurant_name FROM restaurants WHERE restaurant_name = ?", (restaurant_name,))
+    existing_row = cursor.fetchone()
+
+    if existing_row is not None:
+        print(f"The restaurant '{restaurant_name}' already exists in the database.")
+    else:
+        #initializes new empty values in table  to be able to update them later 
+        insert_empty_values_sqlite()
+        #prints the elements in each list till element 10 ( 0 to 9 = 10)
+        for item in result_list[number]:
+            if list_item <= 9:
+                print(item, "\n")
+                #add element to sql database HERE
+                cursor.execute(
+                    f"UPDATE restaurants SET {column_name[list_item]} = ? WHERE id = ?;",
+                    (item, id_table)
+                )
+
+                list_item = list_item + 1
+            else:
+                aditional_items += item + '\n'
+                
+        #prints aditional Items
+        print(aditional_items)
+        #ADDS ADITIONAL ITEMS TO DBS HERE
+        cursor.execute(
+            f"UPDATE restaurants SET Aditional_information = ? WHERE id = ?;",
+            (aditional_items, id_table)
+        )
+
+        #increments the list number
+        number += 1
+
+        #resets the item number
+        list_item = 0
+
+        #increments the id of the table
+        id_table += 1
+        
+        #commits all the updates
+        conn.commit()
 
 
 #closes de conection with sqli
-conn.close()
+#conn.close()
+
+#os.system(f"echo {id_table} > current_id.txt")
