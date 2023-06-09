@@ -3,11 +3,11 @@ from bs4 import BeautifulSoup
 import random
 import sqlite3
 
-def get_urls(URL, user_agents):
+def get_urls(URL, user_agents,cookies):
 
     user_agent = random.choice(user_agents)
     headers = {'User-Agent': user_agent}
-    response = requests.get(URL, headers=headers)
+    response = requests.get(URL, headers=headers,cookies=cookies)
     
     # Check if the request was successful
     if response.status_code == 200:
@@ -111,19 +111,26 @@ URL_EIGHT = ""
 URL_Nine = ""
 
 URLs = [
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1WNwQrCMBAF_2W9NmW7aWKSW8EIQqla9aAiEiFCIbRQRQ_iv7viydODmYH3AgIHhCQFaoF2i1NH1iFCBvLPMCgZIDmJP6_AUQb6WxV5IUtSNhNG5walVcpwYditfLtZNlW9OPj2vN75ds_CsphUj9ClcElxPox1uMdZ1_dxbIYnBwWfH0-8_HkN6RbfHyrG8CCqAAAA?originid=3a07cdce-3721-43e2-922b-0b455b0327e5",
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1WNwQrCMBAF_2W9NmW7aWKSW8EIQqla9aAiEiFCIbRQRQ_iv7viydODmYH3AgIHhCQFaoF2i1NH1iFCBvLPMCgZIDmJP6_AUQb6WxV5IUtSNhNG5walVcpwYditfLtZNlW9OPj2vN75ds_CsphUj9ClcElxPox1uMdZ1_dxbIYnBwWfH0-8_HkN6RbfHyrG8CCqAAAA?originid=3a07cdce-3721-43e2-922b-0b455b0327e5",
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1WNwQrCMBAF_2W9NmW7aWKSW8EIQqla9aAiEiFCIbRQRQ_iv7viydODmYH3AgIHhCQFaoF2i1NH1iFCBvLPMCgZIDmJP6_AUQb6WxV5IUtSNhNG5walVcpwYditfLtZNlW9OPj2vN75ds_CsphUj9ClcElxPox1uMdZ1_dxbIYnBwWfH0-8_HkN6RbfHyrG8CCqAAAA?originid=3a07cdce-3721-43e2-922b-0b455b0327e5",
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1WNwQrCMBAF_2W9NmW7aWKSW8EIQqla9aAiEiFCIbRQRQ_iv7viydODmYH3AgIHhCQFaoF2i1NH1iFCBvLPMCgZIDmJP6_AUQb6WxV5IUtSNhNG5walVcpwYditfLtZNlW9OPj2vN75ds_CsphUj9ClcElxPox1uMdZ1_dxbIYnBwWfH0-8_HkN6RbfHyrG8CCqAAAA?originid=3a07cdce-3721-43e2-922b-0b455b0327e5"
-    
-    
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09&corrid=6658e12a-ea5d-47e1-8d34-cbc28f1be16e",
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09&corrid=6658e12a-ea5d-47e1-8d34-cbc28f1be16e&page=2",
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09&corrid=6658e12a-ea5d-47e1-8d34-cbc28f1be16e&page=3",
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09&corrid=6658e12a-ea5d-47e1-8d34-cbc28f1be16e&page=4",
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09&corrid=6658e12a-ea5d-47e1-8d34-cbc28f1be16e&page=5",
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09&corrid=6658e12a-ea5d-47e1-8d34-cbc28f1be16e&page=6",
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09&corrid=6658e12a-ea5d-47e1-8d34-cbc28f1be16e&page=7"
+
 
 ]
 
 result_list = []
+cookies = {
+    'ftc': 'x=2023-06-09T17%3A43%3A07&c=1&pt1=1&pt2=1',
+    'OptanonAlertBoxClosed':'2023-06-09T16:50:25.326Z',
+    'OT-Session-Update-Date':'1686329427'
 
+}
 for URL in URLs:
-    Rest_URL_list = get_urls(URL, user_agents)
+    Rest_URL_list = get_urls(URL, user_agents,cookies=cookies)
 
     #returns restaurant Information 
 

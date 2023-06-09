@@ -100,7 +100,7 @@ user_agents = [
     ]
 
 
-URL = "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1WNwQrCMBAF_2W9JmWb1TbNrWAEoVSNerAiEiFCIbRQxR6K_-6iJ08PZgbeBAoMKFQkMZNYHDA1SAYRBNCfYTBngGgIf34BRgnIvlWiFeVC6jwhIs1SM95at9_UZbVurLvujtadWBQsZuXLt9HfYlj1Q-WfYdl2XRjqfuQg5d_zhZfv7j4-wvsDLQ9FLKUAAAA=?originid=55ea4280-7023-4498-abf0-a5f73f1c77b8&corrid=be75be06-ab30-4731-8d51-759c72e082b9"
+URL_one = "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1WNwQrCMBAF_2W9JmWb1TbNrWAEoVSNerAiEiFCIbRQxR6K_-6iJ08PZgbeBAoMKFQkMZNYHDA1SAYRBNCfYTBngGgIf34BRgnIvlWiFeVC6jwhIs1SM95at9_UZbVurLvujtadWBQsZuXLt9HfYlj1Q-WfYdl2XRjqfuQg5d_zhZfv7j4-wvsDLQ9FLKUAAAA=?originid=55ea4280-7023-4498-abf0-a5f73f1c77b8&corrid=be75be06-ab30-4731-8d51-759c72e082b9"
 URL_two =""
 URL_three= ""
 URL_four = ""
@@ -110,18 +110,28 @@ URL_SEVEN = ""
 URL_EIGHT = ""
 URL_Nine = ""
 
+URLs = [
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09&corrid=6658e12a-ea5d-47e1-8d34-cbc28f1be16e",
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09&corrid=6658e12a-ea5d-47e1-8d34-cbc28f1be16e&page=2",
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09&corrid=6658e12a-ea5d-47e1-8d34-cbc28f1be16e&page=3",
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09&corrid=6658e12a-ea5d-47e1-8d34-cbc28f1be16e&page=4",
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09&corrid=6658e12a-ea5d-47e1-8d34-cbc28f1be16e&page=5",
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09&corrid=6658e12a-ea5d-47e1-8d34-cbc28f1be16e&page=6",
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOsQrCQAwG4HeJa1ty6SW9u61DBaFUrTpoEalSUSgWFHUQ392Ik1Pg__6QvIAgACGlMUqMfmlMSDkgQgTpn2hgNTCk-HOGQBHIt2US9C4jj2TFWGuj2EniLGci4jNmx6wLTquzol5Mq7ycbIp6N18V9VrBK4zyR3vu233fjYdreb8cTtXwVDP6RrPVqdePbX_r3h8qkSjltAAAAA==?originid=a093e147-ebc1-49c5-840c-6f156ffb2f09&corrid=6658e12a-ea5d-47e1-8d34-cbc28f1be16e&page=7"
 
-#main here
-#Gets restaurnant URL LIST #change with url, url_2 ...
-Rest_URL_list = get_urls(URL, user_agents)
+
+]
 
 result_list = []
 
-#returns restaurant Information 
+for URL in URLs:
+    Rest_URL_list = get_urls(URL, user_agents)
 
-for url in Rest_URL_list:
-    results = scrape_opentable(url,user_agents)
-    result_list.append(results)
+    #returns restaurant Information 
+
+    for url in Rest_URL_list:
+        results = scrape_opentable(url,user_agents)
+        result_list.append(results)
 
 
 # Connect to the SQLite database
