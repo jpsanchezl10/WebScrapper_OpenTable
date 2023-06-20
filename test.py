@@ -3,8 +3,10 @@ from bs4 import BeautifulSoup
 import random
 import sqlite3
 import re
-#import os
+import base64
+import json
 
+#import os
 def get_urls(URL, user_agents):
 
     user_agent = random.choice(user_agents)
@@ -25,10 +27,12 @@ def get_urls(URL, user_agents):
         # Loop over the results and filter href values
         for tag in URL_results:
             href = tag['href']
-            if href.startswith("https://www.opentable.com/r/"):
-                # Split the href by "?" and select the first part
-                url_before_question_mark = href.split('?')[0]
-                filtered_hrefs.add(url_before_question_mark)
+            if href.startswith("/Restaurant_Review"):
+                url_before_tag = href.split('#')[0]
+                new_url = "https://www.tripadvisor.com"+url_before_tag
+                if new_url not in filtered_hrefs:
+                    filtered_hrefs.add(new_url)
+                    #print(new_url)
     
         filtered_hrefs_list = list(filtered_hrefs)
 
@@ -42,7 +46,6 @@ def get_urls(URL, user_agents):
 
 ###Get info from urls
 def scrape_opentable(URL, user_agents):
-
     user_agent = random.choice(user_agents)
     headers = {'User-Agent': user_agent}
     response = requests.get(URL, headers=headers)
@@ -51,44 +54,155 @@ def scrape_opentable(URL, user_agents):
     
     # Check if the request was successful
     if response.status_code == 200:
+
+        print("######")
         # Create a BeautifulSoup object with the response content
         soup = BeautifulSoup(response.content, "html.parser")
 
 
         # Find the name 
-       
-        Name_results = soup.find_all("h1", class_="eM9Li2wbkQvvjxZB11sV mPudeIT67bJGOcOfKy92")
+        Name_results = soup.find_all("h1", class_="HjBfq")
         #adds name to results
         for name in Name_results:
             filtered_name = name.text.strip()
             results.append(filtered_name)
+            print(filtered_name, "\n")
+
 
         #find Rating and append it to results 
-        Rating_results = soup.find_all("span", class_="QBMm80naGcMZ6qlVk6OI cpEOy_DPrbjR6hnlY0ub")
+        Rating_results = soup.find_all("span", class_="ZDEqb")
         for rating in Rating_results:
             filtered_rating = rating.text.strip()
             results.append(filtered_rating)
+            print(filtered_rating, "\n")
 
         #find price range and append to results
-        Price_results = soup.find_all("span", string=lambda t: t and t.startswith("MXN"))
+        Price_results = soup.find_all("div", class_="SrqKb",string=lambda t: t and t.startswith("MX"))
         for price in Price_results:
             filtered_price = price.text.strip()
             results.append(filtered_price)
+            print(filtered_price, "\n")
 
-        # inside same class 
-        # Neigborhood, hour of operation ,cusine style , dining style , dress code, parking details , payment options,chef, phonenumber
-        Aditional_results = soup.find_all("p", class_="c_qirB1mFl5VRKHYJqTz")
+        #find Phone Number 
+        Phone_results = soup.find_all("a", class_="BMQDV _F G- wSSLS SwZTJ",string=lambda t: t and t.startswith("+"))
+        for phone in Phone_results:
+            filtered_phones = phone.text.strip()
+            results.append(filtered_phones)
+            print(filtered_phones, "\n")
+        
+        #find Location in results
+        Location_results = soup.find_all("a", class_="AYHFM")
+        for Location in Location_results:
+            filtered_location = Location.text.strip()
+            if "Cancun" in filtered_location and not filtered_location.startswith("#"):
+                results.append(filtered_location)
+                print(filtered_location, "\n")
+        
 
-        ##ADDS results to array
-        for result in Aditional_results:
-            filtered_text = re.sub(r'<br\s*/?>', '', str(result))
-            filtered_text = re.sub(r'\s*<.*?>\s*', ' ', filtered_text).strip()
-            if filtered_text not in results:
-                results.append(filtered_text)
+        cusine_list = []
+        #find Cusine Style 
+        Cusine_results = soup.find_all("a", class_="dlMOJ")
+        for Cusine in Cusine_results:
+            filtered_Cusine = Cusine.text.strip()
+            if not filtered_Cusine.startswith("$"):
+                cusine_list.append(filtered_Cusine)
+        
+        #join the cusine styles and add the to the results array
+        if cusine_list:
+            joined_cuisines = ", ".join(cusine_list)
+            result_list.append(joined_cuisines)
+            print("Cuisine: ", joined_cuisines, "\n")
+
+        
+        #find Restaurant Position 
+        position_results = soup.find_all("span", class_="",string=lambda t: t and t.startswith("#"))
+        if position_results:
+            filtered_position = position_results[0].text.strip()
+            results.append(filtered_position)
+            print(filtered_position, "\n")
+
+
+        ##find restaurant mail
+        ###############GETTING URLS#############
+        # Find mail
+        mail_results = soup.find_all('a', href=True)    
+        # Loop over the results and filter href values
+        for tag in mail_results:
+            href = tag['href']
+            if href.startswith("mailto:"):
+                mail_before_tag = href.split('?')[0]
+                if mail_before_tag not in results:
+                    # Remove "mailto:" prefix from URL
+                    mail_before_tag = mail_before_tag[len("mailto:"):]
+                    results.append(mail_before_tag)
+                    print(mail_before_tag)
+
+
+        ###############GETTING restaurnat URL#############
+        # Find URLS
+        URL_results = soup.find_all('a', class_='YnKZo Ci Wc _S C FPPgD')
+
+        # Loop over the results and filter href values
+        for tag in URL_results:
+            encoded_url = tag.get('data-encoded-url')
+            decoded_url = base64.b64decode(encoded_url).decode('utf-8')
+            if decoded_url and '+' not in decoded_url and 'google' not in decoded_url:
+                filtered_url = re.sub(r'.*?(http.*?)_.*', r'\1', decoded_url)
+                if filtered_url not in results:
+                    results.append(filtered_url)
+                    print(filtered_url)
+
+        
+                ###############GETTING Map url#############
+        # Find URLS
+        map_results = soup.find_all('a', class_='YnKZo Ci Wc _S C FPPgD')
+
+        # Loop over the results and filter href values
+        for tag in map_results:
+            encoded_map = tag.get('data-encoded-url')
+            decoded_map = base64.b64decode(encoded_map).decode('utf-8')
+            if decoded_map and 'google' in decoded_map:
+                filtered_map = re.sub(r'.*?(http.*?)_.*', r'\1', decoded_map)
+                if filtered_map not in results:
+                    results.append(filtered_map)
+                    print("Map: ", filtered_map)
+
+        # Find the <script> tags
+        script_tags = soup.find_all('script')
+        
+        # Loop over the <script> tags
+        for script_tag in script_tags:
+            script_text = script_tag.string
+            if script_text:
+                # Check if the script text contains the desired information
+                if 'allOpenHours' in script_text:
+                    # Extract the desired information
+                    match = re.search(r'"allOpenHours":(\[.*?\]),', script_text)
+                    if match:
+                        all_open_hours = match.group(1)
+                        #remove brackets
+                        
+                        # Convert the extracted information to a Python object
+                        open_hours_data = json.loads(all_open_hours)
+                        # Append the extracted information to the results
+                        results.append(open_hours_data)
+                        print("Open Hours: ", open_hours_data)
+            
+        # Find the <img> tags
+        img_tags = soup.find_all('img', class_='basicImg')
+
+        # Loop over the <img> tags
+        if img_tags:
+            img_tag = img_tags[0]
+            if 'data-lazyurl' in img_tag.attrs:
+                img_url = img_tag['data-lazyurl']
+                results.append(img_url)
+                print("Image Source:", img_url)
+
         
 
     else:
-        print("Failed to retrieve data from OpenTable.")
+        print("Failed to retrieve data from Trip Advisor.")
     
     return results
 
@@ -104,13 +218,7 @@ user_agents = [
 
 
 URLs = [
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOwQrCMAwG4HeJ122kbZq1ve0wQRhTpx50iFSZKAwHinoQ392IJ0-B__tD8gINATRqkyKn6JfKBOMCIiRg_kQCkkCR4M8tBJ0Af1sqQ-9y7VETKyJKUseZI5szs8-tddbKgpPqrGwW07qoJpuy2c1XZbMW8AKj4hHPfdz33Xi4VvfL4VQPTzElb7RbmXL9GPtb9_4AMi8-_LQAAAA=?originid=91dab0e4-4657-46c6-a5e3-0bc25f0c05b3&page=2&corrid=e3fa0f2b-83ec-4dc6-b3b3-0e0a70081ba7",
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAMMTSzMjS1MjBQ0lEyRpEBCpgABYDyxgYQeVMlKyMdJTOwKj0LI2NzHV0Lcz1jY2MLoKQFUDjANSjY38_RxzPKNSg-MNQ1KBIoYQmUUHYsS8zMSUzKSXXLL3LJzMtLLfLLLwdKGgLtjI4F0kCr0hJzilNrAUE0gwOhAAAA?originid=9d206610-01c4-4ec8-9f2d-f8b29e85bc80&page=2&corrid=11acd1f2-6150-4d16-89f0-a6d7cdb675ac",
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAMMTSzMjS1MjBQ0lEyRpEBCpgABYDyxgYQeVMlKyMdJTOwKj0LI2NzHV0Lcz1jY2MLoKQFUDjANSjY38_RxzPKNSg-MNQ1KBIoYQmUUHYsS8zMSUzKSXXLL3LJzMtLLfLLLwdKGgLtjI4F0kCr0hJzilNrAUE0gwOhAAAA?originid=9d206610-01c4-4ec8-9f2d-f8b29e85bc80&page=3&corrid=86445fb7-2307-4886-96e1-525abfc399e9",
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAMMTSzMjS1MjBQ0lEyRpEBCpgABYDyxgYQeVMlKyMdJTOwKj0LI2NzHV0Lcz1jY2MLoKQFUDjANSjY38_RxzPKNSg-MNQ1KBIoYQmUUHYsS8zMSUzKSXXLL3LJzMtLLfLLLwdKGgLtjI4F0kCr0hJzilNrAUE0gwOhAAAA?originid=9d206610-01c4-4ec8-9f2d-f8b29e85bc80&page=4&corrid=86445fb7-2307-4886-96e1-525abfc399e9",
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAMMTSzMjS1MjBQ0lEyRpEBCpgABYDyxgYQeVMlKyMdJTOwKj0LI2NzHV0Lcz1jY2MLoKQFUDjANSjY38_RxzPKNSg-MNQ1KBIoYQmUUHYsS8zMSUzKSXXLL3LJzMtLLfLLLwdKGgLtjI4F0kCr0hJzilNrAUE0gwOhAAAA?originid=9d206610-01c4-4ec8-9f2d-f8b29e85bc80&page=5&corrid=86445fb7-2307-4886-96e1-525abfc399e9",
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAMMTSzMjS1MjBQ0lEyRpEBCpgABYDyxgYQeVMlKyMdJTOwKj0LI2NzHV0Lcz1jY2MLoKQFUDjANSjY38_RxzPKNSg-MNQ1KBIoYQmUUHYsS8zMSUzKSXXLL3LJzMtLLfLLLwdKGgLtjI4F0kCr0hJzilNrAUE0gwOhAAAA?originid=9d206610-01c4-4ec8-9f2d-f8b29e85bc80&page=6&corrid=86445fb7-2307-4886-96e1-525abfc399e9",
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAMMTSzMjS1MjBQ0lEyRpEBCpgABYDyxgYQeVMlKyMdJTOwKj0LI2NzHV0Lcz1jY2MLoKQFUDjANSjY38_RxzPKNSg-MNQ1KBIoYQmUUHYsS8zMSUzKSXXLL3LJzMtLLfLLLwdKGgLtjI4F0kCr0hJzilNrAUE0gwOhAAAA?originid=9d206610-01c4-4ec8-9f2d-f8b29e85bc80&page=7&corrid=86445fb7-2307-4886-96e1-525abfc399e9"
+    "https://www.tripadvisor.com/Restaurants-g150807-Cancun_Yucatan_Peninsula.html"
 ]
 
 result_list = []
@@ -122,156 +230,4 @@ for URL in URLs:
 
     for url in Rest_URL_list:
         results = scrape_opentable(url,user_agents)
-        result_list.append(results)
-
-
-# Connect to the SQLite database
-conn = sqlite3.connect('Cancun_Restaurants.db')
-cursor = conn.cursor()
-
-# SQLite command to create the restaurants table
-create_table_query = '''
-    CREATE TABLE IF NOT EXISTS restaurants (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        restaurant_name TEXT,
-        restaurant_rating TEXT,
-        restaurant_price TEXT,
-        dining_style TEXT,
-        cuisine_style TEXT,
-        Hours_Operation TEXT,
-        Phone_number TEXT,
-        rest_url TEXT,
-        Payment_options TEXT,
-        dressing_style TEXT,
-        Aditional_information TEXT
-    )
-'''
-
-# Execute the create table command
-cursor.execute(create_table_query)
-
-# Commit the changes and close the connection
-conn.commit()
-#conn.close()
-
-def insert_empty_values_sqlite():
-    values = (
-        'test',
-        'test',
-        'test',
-        'test',
-        'test',
-        'test',
-        'test',
-        'test',
-        'test',
-        'test',
-        'test'
-)
-    # Execute the SQL statement
-    cursor.execute("""
-        INSERT INTO restaurants (
-            restaurant_name,
-            restaurant_rating,
-            restaurant_price,
-            dining_style,
-            cuisine_style,
-            Hours_Operation,
-            Phone_number,
-            rest_url,
-            Payment_options,
-            dressing_style,
-            Aditional_information
-        )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-    """, values)
-
-    # Commit the changes to the database
-    conn.commit()
-
-    ##end of funtion 
-
-#identifies in what restaurant number we are 
-number = 0
-#identifies in what item from the list we are 
-list_item = 0
-
-#try to read if there is a current id
-file_path = 'current_id.txt'
-# Open the file in read mode
-with open(file_path, 'r') as file:
-    file_content = file.read()
-#identifies in what row of the table we are
-
-# Execute the SELECT query to get the last row's ID
-cursor.execute("SELECT id FROM restaurants ORDER BY id DESC LIMIT 1")
-# Fetch the first row from the result
-last_row = cursor.fetchone()
-# Check if a row was returned
-if last_row is not None:
-    # Get the ID value from the first column of the row
-    last_row_id = last_row[0]
-    id_table = last_row
-else:
-    id_table = 1
-
-column_name = ["restaurant_name","restaurant_rating","restaurant_price","dining_style","cuisine_style","Hours_Operation","Phone_number","rest_url","Payment_options","dressing_style","Aditional_information"]
-
-#iterates the result list ( all the restaurnats)
-for i in result_list:
-    
-    #initializes aditional_items or resets it
-    aditional_items = ""
-
-    #CHECK IF the restaurant already exists 
-    
-    restaurant_name = i[0]
-    # Check if the restaurant name already exists in the database
-    cursor.execute("SELECT restaurant_name FROM restaurants WHERE restaurant_name = ?", (restaurant_name,))
-    existing_row = cursor.fetchone()
-
-    if existing_row is not None:
-        print(f"The restaurant '{restaurant_name}' already exists in the database.")
-        last_row_id = existing_row[0]
-        id_table = last_row_id
-    else:
-        #initializes new empty values in table  to be able to update them later 
-        insert_empty_values_sqlite()
-        #prints the elements in each list till element 10 ( 0 to 9 = 10)
-        for item in result_list[number]:
-            if list_item <= 9:
-                print(item, "\n")
-                #add element to sql database HERE
-                cursor.execute(
-                    f"UPDATE restaurants SET {column_name[list_item]} = ? WHERE id = ?;",
-                    (item, id_table)
-                )
-
-                list_item = list_item + 1
-            else:
-                aditional_items += item + '\n'
-                
-        #prints aditional Items
-        print(aditional_items)
-        #ADDS ADITIONAL ITEMS TO DBS HERE
-        cursor.execute(
-            f"UPDATE restaurants SET Aditional_information = ? WHERE id = ?;",
-            (aditional_items, id_table)
-        )
-
-        number  += 1
-
-        #resets the item number
-        list_item = 0
-
-        #increments the id of the table
-        id_table += 1
-        
-        #commits all the updates
-        conn.commit()
-
-
-#closes de conection with sqli
-#conn.close()
-
-#os.system(f"echo {id_table} > current_id.txt")
+        #result_list.append(results)

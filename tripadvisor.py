@@ -4,6 +4,7 @@ import random
 import sqlite3
 import re
 import base64
+import json
 
 #import os
 def get_urls(URL, user_agents):
@@ -137,7 +138,7 @@ def scrape_opentable(URL, user_agents):
                     print(mail_before_tag)
 
 
-        ###############GETTING URL#############
+        ###############GETTING restaurnat URL#############
         # Find URLS
         URL_results = soup.find_all('a', class_='YnKZo Ci Wc _S C FPPgD')
 
@@ -151,7 +152,54 @@ def scrape_opentable(URL, user_agents):
                     results.append(filtered_url)
                     print(filtered_url)
 
+        
+                ###############GETTING Map url#############
+        # Find URLS
+        map_results = soup.find_all('a', class_='YnKZo Ci Wc _S C FPPgD')
 
+        # Loop over the results and filter href values
+        for tag in map_results:
+            encoded_map = tag.get('data-encoded-url')
+            decoded_map = base64.b64decode(encoded_map).decode('utf-8')
+            if decoded_map and 'google' in decoded_map:
+                filtered_map = re.sub(r'.*?(http.*?)_.*', r'\1', decoded_map)
+                if filtered_map not in results:
+                    results.append(filtered_map)
+                    print("Map: ", filtered_map)
+
+        # Find the <script> tags
+        script_tags = soup.find_all('script')
+        
+        # Loop over the <script> tags
+        for script_tag in script_tags:
+            script_text = script_tag.string
+            if script_text:
+                # Check if the script text contains the desired information
+                if 'allOpenHours' in script_text:
+                    # Extract the desired information
+                    match = re.search(r'"allOpenHours":(\[.*?\]),', script_text)
+                    if match:
+                        all_open_hours = match.group(1)
+                        #remove brackets
+                        
+                        # Convert the extracted information to a Python object
+                        open_hours_data = json.loads(all_open_hours)
+                        # Append the extracted information to the results
+                        results.append(open_hours_data)
+                        print("Open Hours: ", open_hours_data)
+            
+        # Find the <img> tags
+        img_tags = soup.find_all('img', class_='basicImg')
+
+        # Loop over the <img> tags
+        if img_tags:
+            img_tag = img_tags[0]
+            if 'data-lazyurl' in img_tag.attrs:
+                img_url = img_tag['data-lazyurl']
+                results.append(img_url)
+                print("Image Source:", img_url)
+
+        
 
     else:
         print("Failed to retrieve data from Trip Advisor.")
