@@ -55,7 +55,7 @@ def scrape_opentable(URL, user_agents):
     # Check if the request was successful
     if response.status_code == 200:
 
-        print("######")
+        #print("######")
         # Create a BeautifulSoup object with the response content
         soup = BeautifulSoup(response.content, "html.parser")
 
@@ -65,61 +65,87 @@ def scrape_opentable(URL, user_agents):
         #adds name to results
         for name in Name_results:
             filtered_name = name.text.strip()
-            results.append(filtered_name)
-            print(filtered_name, "\n")
+            if filtered_name:
+                results.append(filtered_name)
+            else:
+                results.append("?")
+            #print(filtered_name, "\n")
 
 
         #find Rating and append it to results 
         Rating_results = soup.find_all("span", class_="ZDEqb")
         for rating in Rating_results:
             filtered_rating = rating.text.strip()
-            results.append(filtered_rating)
-            print(filtered_rating, "\n")
+            if filtered_rating:
+                results.append(filtered_rating)
+                #print(filtered_rating, "\n")
+            else:
+                results.append("?")
 
         #find price range and append to results
         Price_results = soup.find_all("div", class_="SrqKb",string=lambda t: t and t.startswith("MX"))
         for price in Price_results:
             filtered_price = price.text.strip()
-            results.append(filtered_price)
-            print(filtered_price, "\n")
+            if filtered_price:
+                results.append(filtered_price)
+                #print(filtered_price, "\n")
+            else:
+                results.append("?")
 
         #find Phone Number 
         Phone_results = soup.find_all("a", class_="BMQDV _F G- wSSLS SwZTJ",string=lambda t: t and t.startswith("+"))
         for phone in Phone_results:
             filtered_phones = phone.text.strip()
-            results.append(filtered_phones)
-            print(filtered_phones, "\n")
+            if filtered_phones:
+                results.append(filtered_phones)
+                #print(filtered_phones, "\n")
+            else:
+                results.append("?")
+
         
         #find Location in results
         Location_results = soup.find_all("a", class_="AYHFM")
         for Location in Location_results:
             filtered_location = Location.text.strip()
             if "Cancun" in filtered_location and not filtered_location.startswith("#"):
-                results.append(filtered_location)
-                print(filtered_location, "\n")
+                if filtered_location:
+                    results.append(filtered_location)
+                    #print(filtered_location, "\n")
+                else:
+                    results.append("?")
+
         
 
-        cusine_list = []
-        #find Cusine Style 
+        # Find Cusine Style 
         Cusine_results = soup.find_all("a", class_="dlMOJ")
+        cusine_list = []
         for Cusine in Cusine_results:
             filtered_Cusine = Cusine.text.strip()
             if not filtered_Cusine.startswith("$"):
-                cusine_list.append(filtered_Cusine)
-        
-        #join the cusine styles and add the to the results array
+                if filtered_Cusine:
+                    cusine_list.append(filtered_Cusine)
+                else:
+                    results.append("?")
+
+
+        # Print the cusine styles
         if cusine_list:
             joined_cuisines = ", ".join(cusine_list)
-            result_list.append(joined_cuisines)
-            print("Cuisine: ", joined_cuisines, "\n")
+            results.append(joined_cuisines)
+            #print("Cuisine: ", joined_cuisines, "\n")
+
 
         
-        #find Restaurant Position 
+        #find Restaurant Position RANK
         position_results = soup.find_all("span", class_="",string=lambda t: t and t.startswith("#"))
         if position_results:
             filtered_position = position_results[0].text.strip()
-            results.append(filtered_position)
-            print(filtered_position, "\n")
+            if filtered_position:
+                results.append(filtered_position)
+                #print(filtered_position, "\n")
+            else:
+                results.append("?")
+
 
 
         ##find restaurant mail
@@ -134,8 +160,13 @@ def scrape_opentable(URL, user_agents):
                 if mail_before_tag not in results:
                     # Remove "mailto:" prefix from URL
                     mail_before_tag = mail_before_tag[len("mailto:"):]
-                    results.append(mail_before_tag)
-                    print(mail_before_tag)
+
+                    if mail_before_tag:
+                        results.append(mail_before_tag)
+                        #print(mail_before_tag)
+                    else:
+                        results.append("?")
+
 
 
         ###############GETTING restaurnat URL#############
@@ -149,8 +180,12 @@ def scrape_opentable(URL, user_agents):
             if decoded_url and '+' not in decoded_url and 'google' not in decoded_url:
                 filtered_url = re.sub(r'.*?(http.*?)_.*', r'\1', decoded_url)
                 if filtered_url not in results:
-                    results.append(filtered_url)
-                    print(filtered_url)
+                    if filtered_url:
+                        results.append(filtered_url)
+                        #print(filtered_url)
+                    else:
+                        results.append("?")
+     
 
         
                 ###############GETTING Map url#############
@@ -164,8 +199,12 @@ def scrape_opentable(URL, user_agents):
             if decoded_map and 'google' in decoded_map:
                 filtered_map = re.sub(r'.*?(http.*?)_.*', r'\1', decoded_map)
                 if filtered_map not in results:
-                    results.append(filtered_map)
-                    print("Map: ", filtered_map)
+                    if filtered_map:
+                        results.append(filtered_map)
+                        #print("Map: ", filtered_map)
+                    else:
+                        results.append("?")
+
 
         # Find the <script> tags
         script_tags = soup.find_all('script')
@@ -185,8 +224,12 @@ def scrape_opentable(URL, user_agents):
                         # Convert the extracted information to a Python object
                         open_hours_data = json.loads(all_open_hours)
                         # Append the extracted information to the results
-                        results.append(open_hours_data)
-                        print("Open Hours: ", open_hours_data)
+                        if open_hours_data:
+                            results.append(open_hours_data)
+                            #print("Open Hours: ", open_hours_data)
+                        else:
+                            results.append("?")
+
             
         # Find the <img> tags
         img_tags = soup.find_all('img', class_='basicImg')
@@ -196,8 +239,12 @@ def scrape_opentable(URL, user_agents):
             img_tag = img_tags[0]
             if 'data-lazyurl' in img_tag.attrs:
                 img_url = img_tag['data-lazyurl']
-                results.append(img_url)
-                print("Image Source:", img_url)
+                if img_url:
+                    results.append(img_url)
+                    #print("Image Source:", img_url)
+                else:
+                    results.append("?")
+ 
 
         
 
@@ -230,4 +277,71 @@ for URL in URLs:
 
     for url in Rest_URL_list:
         results = scrape_opentable(url,user_agents)
-        #result_list.append(results)
+        result_list.append(results)
+
+
+# Establish a connection to the SQLite database
+conn = sqlite3.connect("concierge.db")
+cursor = conn.cursor()
+
+
+# SQLite command to create the restaurants table
+create_table_query = '''
+    CREATE TABLE IF NOT EXISTS restaurants (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        restaurant_name TEXT,
+        restaurant_rating TEXT,
+        restaurant_price TEXT,
+        restaurant_phone TEXT,
+        restaurant_location TEXT,
+        restaurant_style TEXT,
+        restaurant_rank TEXT,
+        restaurant_email TEXT,
+        restaurant_url TEXT,
+        restaurant_map TEXT,
+        restaurant_hours TEXT,
+        restaurant_image TEXT
+    )
+'''
+
+# Execute the create table command
+cursor.execute(create_table_query)
+
+# Commit the changes and close the connection
+conn.commit()
+
+
+
+
+# Iterate over each restaurant's information
+for item in result_list:
+    # Check the length of the item list before accessing its elements
+    if len(item) < 12:
+        # Append default values ("?") for missing elements
+        item += ["?"] * (12 - len(item))
+
+    # Extract the restaurant name
+    restaurant_name = item[0]
+
+    # Check if the restaurant already exists in the database
+    cursor.execute("SELECT COUNT(*) FROM restaurants WHERE restaurant_name = ?", (restaurant_name,))
+    count = cursor.fetchone()[0]
+
+    if count > 0:
+        # Restaurant already exists, skip to the next item
+        continue
+
+    # Extract the URL string from the list
+    restaurant_url = str(item[8])
+
+    # Convert the restaurant_hours, restaurant_map, and restaurant_email lists to strings
+    restaurant_hours = str(item[10])
+    restaurant_map = str(item[9])
+    restaurant_email = str(item[7])
+
+    # Insert the restaurant's information into the database
+    cursor.execute("INSERT INTO restaurants (restaurant_name, restaurant_rating, restaurant_price, restaurant_phone, restaurant_location, restaurant_style, restaurant_rank, restaurant_email, restaurant_url, restaurant_map, restaurant_hours, restaurant_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                   (restaurant_name, item[1], item[2], item[3], item[4], item[5], item[6], restaurant_email, restaurant_url, restaurant_map, restaurant_hours, item[11]))
+
+# Commit the changes to the database
+conn.commit()
