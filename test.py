@@ -105,12 +105,12 @@ user_agents = [
 
 URLs = [
     "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOwQrCMAwG4HeJ122kbZq1ve0wQRhTpx50iFSZKAwHinoQ392IJ0-B__tD8gINATRqkyKn6JfKBOMCIiRg_kQCkkCR4M8tBJ0Af1sqQ-9y7VETKyJKUseZI5szs8-tddbKgpPqrGwW07qoJpuy2c1XZbMW8AKj4hHPfdz33Xi4VvfL4VQPTzElb7RbmXL9GPtb9_4AMi8-_LQAAAA=?originid=91dab0e4-4657-46c6-a5e3-0bc25f0c05b3&page=2&corrid=e3fa0f2b-83ec-4dc6-b3b3-0e0a70081ba7",
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOwQrCMAwG4HeJ122kbZq1ve0wQRhTpx50iFSZKAwHinoQ392IJ0-B__tD8gINATRqkyKn6JfKBOMCIiRg_kQCkkCR4M8tBJ0Af1sqQ-9y7VETKyJKUseZI5szs8-tddbKgpPqrGwW07qoJpuy2c1XZbMW8AKj4hHPfdz33Xi4VvfL4VQPTzElb7RbmXL9GPtb9_4AMi8-_LQAAAA=?originid=91dab0e4-4657-46c6-a5e3-0bc25f0c05b3&corrid=e3fa0f2b-83ec-4dc6-b3b3-0e0a70081ba7",
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOwQrCMAwG4HeJ122kbZq1ve0wQRhTpx50iFSZKAwHinoQ392IJ0-B__tD8gINATRqkyKn6JfKBOMCIiRg_kQCkkCR4M8tBJ0Af1sqQ-9y7VETKyJKUseZI5szs8-tddbKgpPqrGwW07qoJpuy2c1XZbMW8AKj4hHPfdz33Xi4VvfL4VQPTzElb7RbmXL9GPtb9_4AMi8-_LQAAAA=?originid=91dab0e4-4657-46c6-a5e3-0bc25f0c05b3&corrid=e3fa0f2b-83ec-4dc6-b3b3-0e0a70081ba7&page=3",
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOwQrCMAwG4HeJ122kbZq1ve0wQRhTpx50iFSZKAwHinoQ392IJ0-B__tD8gINATRqkyKn6JfKBOMCIiRg_kQCkkCR4M8tBJ0Af1sqQ-9y7VETKyJKUseZI5szs8-tddbKgpPqrGwW07qoJpuy2c1XZbMW8AKj4hHPfdz33Xi4VvfL4VQPTzElb7RbmXL9GPtb9_4AMi8-_LQAAAA=?originid=91dab0e4-4657-46c6-a5e3-0bc25f0c05b3&corrid=18647b7f-d67f-46f6-b654-3b69d6117f60&page=4",
-    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_1XOwQrCMAwG4HeJ122kbZq1ve0wQRhTpx50iFSZKAwHinoQ392IJ0-B__tD8gINATRqkyKn6JfKBOMCIiRg_kQCkkCR4M8tBJ0Af1sqQ-9y7VETKyJKUseZI5szs8-tddbKgpPqrGwW07qoJpuy2c1XZbMW8AKj4hHPfdz33Xi4VvfL4VQPTzElb7RbmXL9GPtb9_4AMi8-_LQAAAA=?originid=91dab0e4-4657-46c6-a5e3-0bc25f0c05b3&corrid=18647b7f-d67f-46f6-b654-3b69d6117f60&page=5"
-
-
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAMMTSzMjS1MjBQ0lEyRpEBCpgABYDyxgYQeVMlKyMdJTOwKj0LI2NzHV0Lcz1jY2MLoKQFUDjANSjY38_RxzPKNSg-MNQ1KBIoYQmUUHYsS8zMSUzKSXXLL3LJzMtLLfLLLwdKGgLtjI4F0kCr0hJzilNrAUE0gwOhAAAA?originid=9d206610-01c4-4ec8-9f2d-f8b29e85bc80&page=2&corrid=11acd1f2-6150-4d16-89f0-a6d7cdb675ac",
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAMMTSzMjS1MjBQ0lEyRpEBCpgABYDyxgYQeVMlKyMdJTOwKj0LI2NzHV0Lcz1jY2MLoKQFUDjANSjY38_RxzPKNSg-MNQ1KBIoYQmUUHYsS8zMSUzKSXXLL3LJzMtLLfLLLwdKGgLtjI4F0kCr0hJzilNrAUE0gwOhAAAA?originid=9d206610-01c4-4ec8-9f2d-f8b29e85bc80&page=3&corrid=86445fb7-2307-4886-96e1-525abfc399e9",
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAMMTSzMjS1MjBQ0lEyRpEBCpgABYDyxgYQeVMlKyMdJTOwKj0LI2NzHV0Lcz1jY2MLoKQFUDjANSjY38_RxzPKNSg-MNQ1KBIoYQmUUHYsS8zMSUzKSXXLL3LJzMtLLfLLLwdKGgLtjI4F0kCr0hJzilNrAUE0gwOhAAAA?originid=9d206610-01c4-4ec8-9f2d-f8b29e85bc80&page=4&corrid=86445fb7-2307-4886-96e1-525abfc399e9",
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAMMTSzMjS1MjBQ0lEyRpEBCpgABYDyxgYQeVMlKyMdJTOwKj0LI2NzHV0Lcz1jY2MLoKQFUDjANSjY38_RxzPKNSg-MNQ1KBIoYQmUUHYsS8zMSUzKSXXLL3LJzMtLLfLLLwdKGgLtjI4F0kCr0hJzilNrAUE0gwOhAAAA?originid=9d206610-01c4-4ec8-9f2d-f8b29e85bc80&page=5&corrid=86445fb7-2307-4886-96e1-525abfc399e9",
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAMMTSzMjS1MjBQ0lEyRpEBCpgABYDyxgYQeVMlKyMdJTOwKj0LI2NzHV0Lcz1jY2MLoKQFUDjANSjY38_RxzPKNSg-MNQ1KBIoYQmUUHYsS8zMSUzKSXXLL3LJzMtLLfLLLwdKGgLtjI4F0kCr0hJzilNrAUE0gwOhAAAA?originid=9d206610-01c4-4ec8-9f2d-f8b29e85bc80&page=6&corrid=86445fb7-2307-4886-96e1-525abfc399e9",
+    "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNbAMMTSzMjS1MjBQ0lEyRpEBCpgABYDyxgYQeVMlKyMdJTOwKj0LI2NzHV0Lcz1jY2MLoKQFUDjANSjY38_RxzPKNSg-MNQ1KBIoYQmUUHYsS8zMSUzKSXXLL3LJzMtLLfLLLwdKGgLtjI4F0kCr0hJzilNrAUE0gwOhAAAA?originid=9d206610-01c4-4ec8-9f2d-f8b29e85bc80&page=7&corrid=86445fb7-2307-4886-96e1-525abfc399e9"
 ]
 
 result_list = []
@@ -202,12 +202,6 @@ file_path = 'current_id.txt'
 with open(file_path, 'r') as file:
     file_content = file.read()
 #identifies in what row of the table we are
-# Convert the file content to an integer
-#try:
-#    id_table = int(file_content)
-#    #adds one to the id so it wont overwrite last item 
-#except ValueError:
-#    id_table = 1
 
 # Execute the SELECT query to get the last row's ID
 cursor.execute("SELECT id FROM restaurants ORDER BY id DESC LIMIT 1")
@@ -238,6 +232,8 @@ for i in result_list:
 
     if existing_row is not None:
         print(f"The restaurant '{restaurant_name}' already exists in the database.")
+        last_row_id = existing_row[0]
+        id_table = last_row_id
     else:
         #initializes new empty values in table  to be able to update them later 
         insert_empty_values_sqlite()
@@ -263,8 +259,7 @@ for i in result_list:
             (aditional_items, id_table)
         )
 
-        #increments the list number
-        number += 1
+        number  += 1
 
         #resets the item number
         list_item = 0

@@ -14,7 +14,7 @@ def get_urls(URL, user_agents):
     # Check if the request was successful
     if response.status_code == 200:
         # Create a BeautifulSoup object with the response content
-        soup = BeautifulSoup(response.content, "html.parser")
+        soup = BeautifulSoup(response.content, "html.parse3r")
 
         ###############GETTING URLS#############
         # Find URLS
@@ -140,7 +140,7 @@ create_table_query = '''
         cuisine_style TEXT,
         Hours_Operation TEXT,
         Phone_number TEXT,
-        rest_url TEXT,
+        rest_url TEXT,no
         Payment_options TEXT,
         dressing_style TEXT,
         Aditional_information TEXT
@@ -202,12 +202,6 @@ file_path = 'current_id.txt'
 with open(file_path, 'r') as file:
     file_content = file.read()
 #identifies in what row of the table we are
-# Convert the file content to an integer
-#try:
-#    id_table = int(file_content)
-#    #adds one to the id so it wont overwrite last item 
-#except ValueError:
-#    id_table = 1
 
 # Execute the SELECT query to get the last row's ID
 cursor.execute("SELECT id FROM restaurants ORDER BY id DESC LIMIT 1")
@@ -238,6 +232,8 @@ for i in result_list:
 
     if existing_row is not None:
         print(f"The restaurant '{restaurant_name}' already exists in the database.")
+        last_row_id = existing_row[0]
+        id_table = last_row_id
     else:
         #initializes new empty values in table  to be able to update them later 
         insert_empty_values_sqlite()
@@ -263,8 +259,7 @@ for i in result_list:
             (aditional_items, id_table)
         )
 
-        #increments the list number
-        number += 1
+        number  += 1
 
         #resets the item number
         list_item = 0
