@@ -106,7 +106,6 @@ user_agents = [
 URLs = [
     "https://www.opentable.com/lolz-view-all/H4sIAAAAAAAA_6tWMlKyUjIyMDLWNTDTNTIIMTS3MrWwMjBQ0lEyRpEBCpgABQyNgZIQeVMlKyMdJTOQKkM9Q2MTI1NLHV0LMz0LA2NLU1MLoAoLoFyAa1Cwv5-jj2eUa1B8YKhrUCRQwhIooexfWpKSn1_kkpmXmZcOFDQEWhgdC6SB9qQl5hSn1gIA5ga-YZ4AAAA=?originid=62c09ffd-b2fd-4324-89af-b30f9c5de514"
 ]
-
 result_list = []
 
 for URL in URLs:
@@ -148,13 +147,6 @@ cursor.execute(create_table_query)
 conn.commit()
 #conn.close()
 
-
-
-
-
-
-
-
 def insert_empty_values_sqlite():
     values = (
         'test',
@@ -192,22 +184,17 @@ def insert_empty_values_sqlite():
 
     ##end of funtion 
 
-
-
-
-
-
-
-
-
-
-
-
 #identifies in what restaurant number we are 
 number = 0
 #identifies in what item from the list we are 
 list_item = 0
 
+#try to read if there is a current id
+file_path = 'current_id.txt'
+# Open the file in read mode
+with open(file_path, 'r') as file:
+    file_content = file.read()
+#identifies in what row of the table we are
 
 # Execute the SELECT query to get the last row's ID
 cursor.execute("SELECT id FROM restaurants ORDER BY id DESC LIMIT 1")
@@ -236,35 +223,13 @@ for i in result_list:
     cursor.execute("SELECT restaurant_name FROM restaurants WHERE restaurant_name = ?", (restaurant_name,))
     existing_row = cursor.fetchone()
 
-
-
-
-
-
-
     if existing_row is not None:
         print(f"The restaurant '{restaurant_name}' already exists in the database.")
         last_row_id = existing_row[0]
         id_table = last_row_id
-
-
-
-
-
     else:
         #initializes new empty values in table  to be able to update them later 
-
-
-
-
-
         insert_empty_values_sqlite()
-
-
-
-
-
-        
         #prints the elements in each list till element 10 ( 0 to 9 = 10)
         for item in result_list[number]:
             if list_item <= 9:
@@ -298,8 +263,3 @@ for i in result_list:
         #commits all the updates
         conn.commit()
 
-
-#closes de conection with sqli
-#conn.close()
-
-#os.system(f"echo {id_table} > current_id.txt")
