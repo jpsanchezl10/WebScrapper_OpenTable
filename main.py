@@ -49,12 +49,13 @@ def scrape_opentable(URL, user_agents):
     user_agent = random.choice(user_agents)
     headers = {'User-Agent': user_agent}
     response = requests.get(URL, headers=headers)
+    rest_name = ""
 
     
     # Check if the request was successful
     if response.status_code == 200:
 
-        print("\n####NEW_RESTAURANT####\n")
+        #print("\n####NEW_RESTAURANT####\n")
         # Create a BeautifulSoup object with the response content
         soup = BeautifulSoup(response.content, "html.parser")
 
@@ -66,7 +67,7 @@ def scrape_opentable(URL, user_agents):
             filtered_name = name.text.strip()
 
             rest_name = str(filtered_name)
-            print("0: ",rest_name)
+            #print("0: ",rest_name)
 
             
 
