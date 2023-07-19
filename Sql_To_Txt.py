@@ -73,7 +73,7 @@ def ask_gpt3(id):
     answer = response.choices[0].text.strip()  # Extract the answer
     return answer
 
-openai.api_key = "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"
+
 
 
 
